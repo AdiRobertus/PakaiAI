@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PakaiAI | Secure B2B AI & Private Enterprise Search</title>
+    <meta name="description" content="Deploy a secure, B2B-only AI search engine. Connect your documents, chat with your data, and ensure zero-leak privacy with PakaiAI.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lexend:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-brand: #00abe1;
+            --primary-monochrome: #1A1A1B;
+            --accent-gray: #333335;
+            --light-gray: #F4F4F9;
+            --border-color: #e5e7eb;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: white;
+            color: var(--primary-monochrome);
+        }
+        h1, h2, h3 {
+            font-family: 'Lexend', sans-serif;
+        }
+        .mono-glow {
+            box-shadow: 0 10px 30px -10px rgba(0, 171, 225, 0.3);
+        }
+        .bento-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary-brand);
+            box-shadow: 0 20px 25px -5px rgba(0, 171, 225, 0.05);
+        }
+        .marquee {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 2rem;
+        }
+        .marquee-content {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            min-width: 100%;
+            gap: 4rem;
+            animation: scroll 40s linear infinite;
+        }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        .modal-overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+        .btn-primary {
+            background-color: var(--primary-brand);
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0096c7;
+            transform: scale(1.02);
+        }
+        .text-brand {
+            color: var(--primary-brand);
+        }
+        .bg-brand {
+            background-color: var(--primary-brand);
+        }
+
+        /* Citation Animation Styles */
+        .citation-window {
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(0.9) translateY(10px);
+            opacity: 0;
+        }
+        .citation-active .citation-window {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+        .highlight-bar {
+            width: 0;
+            transition: width 1s ease 0.6s;
+        }
+        .citation-active .highlight-bar {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header/Nav -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-[#00abe1] rounded-lg flex items-center justify-center">
+                        <i data-lucide="zap" class="text-white w-6 h-6"></i>
+                    </div>
+                    <span class="text-2xl font-extrabold tracking-tight text-[#1A1A1B]">PakaiAI</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="text-sm font-semibold text-gray-600 hover:text-brand transition">Solutions</a>
+                    <a href="#security" class="text-sm font-semibold text-gray-600 hover:text-brand transition">Security</a>
+                    <a href="#" class="text-sm font-semibold text-gray-600 hover:text-brand transition">Pricing</a>
+                    <button onclick="toggleModal()" class="btn-primary px-6 py-2.5 rounded-full font-bold text-sm mono-glow">
+                        Book a Demo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-40 pb-24 overflow-hidden bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:flex items-center gap-16">
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-blue-50 text-[#00abe1] px-4 py-1.5 rounded-full text-xs font-bold tracking-wide mb-8 uppercase border border-blue-100">
+                        <span class="w-2 h-2 rounded-full bg-[#00abe1] animate-pulse"></span>
+                        <span>SOC2 Type II Pending</span>
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-[#1A1A1B] leading-[1.1] mb-8">
+                        Intelligence, <span class="bg-[#00abe1] text-white px-2">Refined.</span>
+                    </h1>
+                    <p class="text-xl text-gray-500 mb-12 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Connect your enterprise documents. Deploy a secure, B2B-only AI search engine. Total privacy, zero hallucinations.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                        <button onclick="toggleModal()" class="w-full sm:w-auto btn-primary px-10 py-5 rounded-xl font-bold text-lg mono-glow flex items-center justify-center gap-2">
+                            Book a Demo <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                        <button class="w-full sm:w-auto border-2 border-blue-200 text-[#00abe1] bg-blue-50/30 px-10 py-5 rounded-xl font-bold text-lg hover:bg-[#00abe1] hover:text-white hover:border-[#00abe1] transition-all flex items-center justify-center gap-2">
+                            Watch Walkthrough
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:w-1/2 mt-20 lg:mt-0 relative">
+                    <div class="relative z-10 bg-white rounded-2xl shadow-[0_32px_64px_-15px_rgba(0,171,225,0.15)] border border-gray-100 p-6 max-w-xl mx-auto">
+                        <div class="flex items-center justify-between mb-6 border-b pb-4">
+                            <div class="flex space-x-1.5">
+                                <div class="w-3 h-3 rounded-full bg-blue-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-blue-100"></div>
+                                <div class="w-3 h-3 rounded-full bg-blue-100"></div>
+                            </div>
+                            <div class="text-[10px] font-mono text-gray-400 uppercase tracking-widest">secure-node-alpha</div>
+                        </div>
+                        <div class="space-y-6">
+                            <div class="bg-gray-50 p-5 rounded-xl ml-10 text-sm text-gray-600 border border-gray-100 font-medium">
+                                "Summarize our data retention policy for EU clients."
+                            </div>
+                            <div class="bg-white p-5 rounded-xl mr-10 border-2 border-[#00abe1] shadow-sm">
+                                <p class="text-sm font-semibold text-gray-900 mb-4 leading-relaxed">Personal data is retained for 7 years post-contract termination. All EU data is stored on Frankfurt-based servers (AWS eu-central-1).</p>
+                                <div class="flex items-center gap-2 pt-3 border-t border-gray-100">
+                                    <span class="text-[9px] font-black text-[#00abe1] uppercase tracking-tighter">Verified Source:</span>
+                                    <div class="flex items-center gap-1 text-[10px] bg-blue-50 px-2 py-1 rounded font-bold text-[#00abe1]">
+                                        <i data-lucide="file-text" class="w-3 h-3"></i> legal_compliance_v4.pdf
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Subtle background decoration -->
+                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 opacity-60"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Signals -->
+    <section class="py-16 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="text-center text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mb-12">Trusted by industry leaders in secure operations</p>
+            <div class="marquee opacity-50">
+                <div class="marquee-content">
+                    <span class="text-xl font-bold tracking-tight text-gray-900">FinTech Solutions</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">Global Logistics Corp</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">Astra Legal Group</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">Prime Infrastructure</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">Nexus Health Systems</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900 text-brand">FinTech Solutions</span>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">Global Logistics Corp</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillars Section -->
+    <section id="features" class="py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-12">
+                <div class="group">
+                    <div class="w-14 h-14 bg-[#00abe1] rounded-2xl flex items-center justify-center text-white mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="layers" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Indexing</h3>
+                    <p class="text-gray-500 leading-relaxed">No manual tagging. Sync your entire stack in minutes—Notion, Drive, and local servers.</p>
+                </div>
+                <div class="group">
+                    <div class="w-14 h-14 bg-[#00abe1] rounded-2xl flex items-center justify-center text-white mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="shield" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Privacy</h3>
+                    <p class="text-gray-500 leading-relaxed">Your data is never used for training. Isolated silos ensure zero leakage to global models.</p>
+                </div>
+                <div class="group relative" id="accuracy-pillar">
+                    <div class="w-14 h-14 bg-[#00abe1] rounded-2xl flex items-center justify-center text-white mb-8 group-hover:scale-110 transition-transform">
+                        <i data-lucide="check-circle" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">Accuracy</h3>
+                    <p class="text-gray-500 leading-relaxed mb-6">Strict citation engine. If the answer isn't in your data, we don't invent it. Audit-ready 100%.</p>
+                    
+                    <!-- New Citation Animation Element -->
+                    <div class="mt-6 p-4 bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden min-h-[140px] relative">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Confidence: 99.8%</span>
+                        </div>
+                        
+                        <!-- Citation Preview -->
+                        <div class="citation-window absolute left-4 right-4 top-12 bg-gray-50 rounded-lg border border-blue-100 p-3 shadow-xl z-10">
+                            <div class="flex items-center gap-2 border-b border-gray-200 pb-2 mb-2">
+                                <i data-lucide="file-text" class="w-3 h-3 text-[#00abe1]"></i>
+                                <span class="text-[9px] font-bold text-gray-600">policy_v2_2024.pdf</span>
+                            </div>
+                            <div class="relative overflow-hidden">
+                                <p class="text-[10px] text-gray-500 leading-normal">
+                                    The company will strictly adhere to the <span class="relative z-10 px-1">7-year data retention mandate</span> for all enterprise-grade client contracts as per regulatory requirements...
+                                </p>
+                                <!-- The Highlight Segment Animation -->
+                                <div class="highlight-bar absolute bottom-0 left-[110px] h-[14px] top-0 bg-[#00abe1]/20 -z-0"></div>
+                            </div>
+                        </div>
+
+                        <!-- Mock background text lines -->
+                        <div class="space-y-2 opacity-20">
+                            <div class="h-2 w-3/4 bg-gray-200 rounded"></div>
+                            <div class="h-2 w-1/2 bg-gray-200 rounded"></div>
+                            <div class="h-2 w-5/6 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Bento Grid -->
+    <section id="security" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16">
+                <h2 class="text-4xl font-extrabold mb-4 tracking-tight">Security First.</h2>
+                <p class="text-gray-500 font-medium">We built the architecture IT Directors demand.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bento-card md:col-span-2 p-10 rounded-3xl bg-gray-50 border-none">
+                    <h4 class="text-xl font-bold mb-4">SSO & Provisioning</h4>
+                    <p class="text-gray-500 text-sm mb-10">Seamless auth via Okta, Azure AD, and Google Workspace. SCIM support included.</p>
+                    <div class="flex space-x-4">
+                         <div class="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center"><i data-lucide="key" class="w-5 h-5 text-[#00abe1]"></i></div>
+                         <div class="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-100 flex items-center justify-center"><i data-lucide="users" class="w-5 h-5 text-[#00abe1]"></i></div>
+                    </div>
+                </div>
+                
+                <div class="bento-card md:col-span-2 p-10 rounded-3xl bg-[#1A1A1B] text-white border-none">
+                    <h4 class="text-xl font-bold mb-4">Data Sovereignty</h4>
+                    <p class="text-gray-400 text-sm mb-6">Deploy to specific AWS/GCP regions. Maintain compliance with regional data laws automatically.</p>
+                    <div class="text-[10px] font-mono text-[#00abe1] p-3 bg-white/5 rounded">
+                        DEPLOYMENT_STATUS: CLOUD_ISOLATED <br>
+                        REGION: EU_CENTRAL_1
+                    </div>
+                </div>
+
+                <div class="bento-card md:col-span-4 p-10 rounded-3xl flex flex-col md:flex-row items-center justify-between border-2 border-black">
+                    <div class="md:w-1/2 mb-8 md:mb-0">
+                        <h4 class="text-2xl font-bold mb-4">Full Audit Visibility</h4>
+                        <p class="text-gray-500">Track every query, file access, and system interaction with real-time logs exportable to your SIEM.</p>
+                    </div>
+                    <div class="w-full md:w-auto">
+                        <button class="btn-primary px-8 py-4 rounded-xl font-bold w-full md:w-auto shadow-lg shadow-blue-200">Review Compliance Pack</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-32 bg-white border-t border-gray-100 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 text-center relative z-10">
+            <h2 class="text-5xl lg:text-7xl font-extrabold mb-10 tracking-tighter">Your Knowledge, <br><span class="text-[#00abe1]">Unchained.</span></h2>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <button onclick="toggleModal()" class="btn-primary px-12 py-6 rounded-2xl font-black text-xl mono-glow w-full sm:w-auto">
+                    Request Enterprise Pilot
+                </button>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">No Commitment Required</span>
+            </div>
+        </div>
+        <!-- Decorative bg -->
+        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-t from-blue-50/50 to-transparent -z-10"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-12">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-8 h-8 bg-[#00abe1] rounded flex items-center justify-center">
+                            <i data-lucide="zap" class="text-white w-5 h-5"></i>
+                        </div>
+                        <span class="text-xl font-black tracking-tight">PakaiAI</span>
+                    </div>
+                    <p class="text-sm text-gray-400 max-w-xs">Built for the modern enterprise that demands security without sacrificing intelligence.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-16">
+                    <div class="space-y-4">
+                        <h5 class="text-xs font-black uppercase tracking-widest text-gray-900">Platform</h5>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><a href="#" class="hover:text-brand transition">Security</a></li>
+                            <li><a href="#" class="hover:text-brand transition">Integrations</a></li>
+                            <li><a href="#" class="hover:text-brand transition">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div class="space-y-4">
+                        <h5 class="text-xs font-black uppercase tracking-widest text-gray-900">Legal</h5>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li><a href="#" class="hover:text-brand transition">Privacy</a></li>
+                            <li><a href="#" class="hover:text-brand transition">SOC2 Report</a></li>
+                            <li><a href="#" class="hover:text-brand transition">GDPR</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-gray-200 flex justify-between items-center text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                <span>© 2024 PakaiAI Inc.</span>
+                <div class="flex space-x-6">
+                    <a href="#" class="hover:text-brand">Twitter</a>
+                    <a href="#" class="hover:text-brand">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lead Capture Modal -->
+    <div id="demoModal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+        <div class="modal-overlay absolute inset-0" onclick="toggleModal()"></div>
+        <div class="bg-white w-full max-w-lg rounded-3xl relative z-10 shadow-2xl overflow-hidden border border-gray-100">
+            <div class="p-10">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h3 class="text-3xl font-black tracking-tight">Access the Pilot</h3>
+                        <p class="text-gray-500 text-sm mt-2">Deploy your private instance in minutes.</p>
+                    </div>
+                    <button onclick="toggleModal()" class="text-gray-300 hover:text-black transition">
+                        <i data-lucide="x" class="w-8 h-8"></i>
+                    </button>
+                </div>
+                <form id="leadForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Full Name</label>
+                            <input type="text" required placeholder="Jane Doe" class="w-full px-5 py-4 rounded-xl border-2 border-gray-100 focus:border-brand outline-none transition font-medium">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Work Email</label>
+                            <input type="email" required placeholder="jane@company.com" class="w-full px-5 py-4 rounded-xl border-2 border-gray-100 focus:border-brand outline-none transition font-medium">
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest">Enterprise Role</label>
+                        <select class="w-full px-5 py-4 rounded-xl border-2 border-gray-100 focus:border-brand outline-none transition font-medium appearance-none">
+                            <option>CTO / Head of IT</option>
+                            <option>Operations / Legal</option>
+                            <option>Compliance Officer</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full btn-primary py-5 rounded-xl font-black text-lg mono-glow mt-4">
+                        Initialize Demo
+                    </button>
+                </form>
+                <div id="successMessage" class="hidden text-center py-10">
+                    <div class="w-20 h-20 bg-blue-50 border-2 border-brand rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i data-lucide="check" class="w-10 h-10 text-brand"></i>
+                    </div>
+                    <h4 class="text-2xl font-black mb-3">Deployment Initiated</h4>
+                    <p class="text-gray-500">Check your inbox for your secure access key.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Citation Animation Loop
+        function runCitationAnimation() {
+            const pillar = document.getElementById('accuracy-pillar');
+            setInterval(() => {
+                pillar.classList.add('citation-active');
+                setTimeout(() => {
+                    pillar.classList.remove('citation-active');
+                }, 4000);
+            }, 5500);
+        }
+
+        window.onload = () => {
+            runCitationAnimation();
+        };
+
+        function toggleModal() {
+            const modal = document.getElementById('demoModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('leadForm');
+            const success = document.getElementById('successMessage');
+            
+            form.classList.add('hidden');
+            success.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toggleModal();
+                setTimeout(() => {
+                    form.classList.remove('hidden');
+                    success.classList.add('hidden');
+                    form.reset();
+                }, 500);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
